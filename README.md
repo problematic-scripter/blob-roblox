@@ -1,5 +1,7 @@
 # Binary Lunar OBjects library
 
+Note: I have forked this to make it a little more friendly to Roblox Lua. I do not claim to own this.
+
 This is a simple helper utility for parsing binary data in Lua.
 
 Blob is primarily a wrapper around a struct unpack function, spiced up with some
