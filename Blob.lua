@@ -1,26 +1,20 @@
 local Blob = {}
 
+--[[
+	Changes from original:
+		Removed string.packsize and string.unpack check (present in LuaU)
+		Removed Blob.load (redundant, the io library doesnt exist in LuaU)
+]]
+
 local lib = {}
-if string.packsize and string.unpack then
-  lib.size = string.packsize
-  lib.unpack = string.unpack
-  lib.zerostring = "z"
-  lib.prefixstring = function(bytes)
-    if bytes then return string.format("s%d", bytes)
-    else return "s" end
-  end
-  Blob.backend = "lua"
-else
-  local struct = require("struct")
-  lib.size = struct.size
-  lib.unpack = struct.unpack
-  lib.zerostring = "s"
-  lib.prefixstring = function(bytes)
-    if bytes then return string.format("I%dc0", bytes)
-    else return "%Tc0" end
-  end
-  Blob.backend = "struct"
+lib.size = string.packsize
+lib.unpack = string.unpack
+lib.zerostring = "z"
+lib.prefixstring = function(bytes)
+	if bytes then return string.format("s%d", bytes)
+	else return "s" end
 end
+Blob.backend = "lua"
 
 local unpack = unpack or table.unpack
 
@@ -230,15 +224,6 @@ Blob.new = function(string, offset)
       else return Blob[name] end
     end
   })
-  return blob
-end
-
--- Create a new blob from the content of the given file
-Blob.load = function(filename)
-  local f = assert(io.open(filename, "rb"), "Could not open file ".. filename)
-  local buffer = f:read("*all")
-  f:close()
-  local blob = Blob.new(buffer)
   return blob
 end
 
